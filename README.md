@@ -22,8 +22,16 @@ python -m pip install -e .
 
 A mesh-convergence claim should always state what observable was tested, how the characteristic mesh scale was defined, what sequence of meshes was used, and what tolerance was accepted. Different observables can converge at very different rates, so convergence of orbital energy does not imply convergence of a derivative or a g-tensor. The long-term goal of this repository is to automate complete numerical uncertainty reports that can accompany quantum-device simulation results.
 
+## Runnable scientific baseline
+
+The script reads three measurements of the same observable at decreasing characteristic spacings. If the successive differences are consistent with a monotone power-law error, it estimates an observed order p from their ratio and extrapolates the finest two values to zero spacing. Because only three points determine both p and the extrapolated limit, the result is a diagnostic rather than a confidence interval. Nonmonotone behavior or a ratio outside the permitted power-law range produces no extrapolation, which is preferable to manufacturing a convergence estimate.
+
+Prepare a CSV with headers `h_nm,value` and three coarse-to-fine rows such as `8,1.16`, `6,1.09`, `4,1.04`; run `python src/main.py mesh.csv`. Every value must represent the same physical state and observable in the same units. Before interpreting a small final shift, check solver tolerances, eigenstate tracking, alignment, domain size, material model, and derivative step sizes. Strongly anisotropic meshes need a documented characteristic spacing or a separate directional refinement study.
+
+## Validation and scope
+
+The calculations in `src/main.py` are transparent baseline models intended for reproducibility and extension. Inputs and assumptions should be reported alongside outputs; numerical agreement with a plotted trace alone does not validate a material-specific prediction. New physical terms should be accompanied by dimensional checks and independent limiting-case comparisons.
+
 ## Contact
 
-**Athul Prem**
-
-For scientific discussion, collaboration, or suggestions related to this project, please contact Athul Prem through the GitHub account associated with this repository.
+**Athul Prem** — [GitHub profile](https://github.com/premathul). For scientific discussion or collaboration, open an issue in this repository or reach out through my GitHub profile.
